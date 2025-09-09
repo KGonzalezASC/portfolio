@@ -1,4 +1,5 @@
 import Image from "next/image";
+import {Card} from "@/Components/Card";
 
 export default function Home() {
   return (
@@ -12,6 +13,11 @@ export default function Home() {
           height={38}
           priority
         />
+          <Card
+              title="Hello Next.js"
+              description="This is a reusable card component styled with Tailwind."
+          >
+          </Card>
         <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
           <li className="mb-2 tracking-[-.01em]">
             Get started by editing{" "}
