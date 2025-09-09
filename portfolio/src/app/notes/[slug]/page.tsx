@@ -24,7 +24,7 @@ async function getNoteFromLocalFile(slug: string): Promise<string | null> {
     }
 }
 
-export async function NotePage({params}: { params: { slug: string } }) {
+export default async function NotePage({params}: { params: { slug: string } }) {
     const {slug} = params;
     const markdownContent = await getNoteFromLocalFile(slug);
 
