@@ -1,33 +1,12 @@
-﻿// tailwind.Config.ts
-import plugin from "@tailwindcss/typography";
+﻿// tailwind.config.ts
+import tailwindScrollbar from "tailwind-scrollbar";
+import {defineConfig} from "next/dist/experimental/testmode/playwright";
 
-import tailwind_scrollbar from "tailwind-scrollbar";
-
-const config: {
-    content: string[];
-    theme: {
-        extend: {
-            keyframes: {
-                "spin-slow": { "0%": { "--angle": string }; "100%": { "--angle": string } },
-                "color-change": {
-                    "0%, 100%": { "background-position": "0% 50%" },
-                    "50%": { "background-position": "100% 50%" },
-                },
-            };
-            animation: {
-                "spin-slow": string;
-                "color-change": string;
-            }
-        }
-    };
-    plugins: (plugin | ((options?: Partial<{ className: string; target: "modern" | "legacy" }>) => {
-        handler: () => void
-    }))[]
-} = {
+export default defineConfig({
     content: [
         "./src/**/*.{js,ts,jsx,tsx,mdx}",
         "./components/**/*.{js,ts,jsx,tsx,mdx}",
-        './app/**/*.{js,ts,jsx,tsx,mdx}', // This path was missing
+        "./app/**/*.{js,ts,jsx,tsx,mdx}",
     ],
     theme: {
         extend: {
@@ -48,8 +27,6 @@ const config: {
         },
     },
     plugins: [
-        require("@tailwindcss/typography"),
-        tailwind_scrollbar({ nocompatible: true }),    ],
-};
-
-export default config;
+        tailwindScrollbar({ nocompatible: true }),
+    ],
+});
