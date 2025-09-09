@@ -5,15 +5,14 @@ import ReactMarkdown, { type Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import { CardCode } from "@/app/notes/Components/CodeCard";
-import {ColorEffectProvider} from "@/app/notes/Components/ColorEffectProvider";
-import {JSX} from "react"; //now properly used as vercel linter didn't let this pass
+import { ColorEffectProvider } from "@/app/notes/Components/ColorEffectProvider";
+import {JSX} from "react";
 
 export const dynamic = 'force-dynamic';
 
 async function getNoteFromLocalFile(slug: string): Promise<string | null> {
     try {
-        let filePath: string;
-        filePath = path.join(
+        const filePath = path.join(
             process.cwd(),
             '../_notes/Babble',
             `${slug}.md`
@@ -25,10 +24,8 @@ async function getNoteFromLocalFile(slug: string): Promise<string | null> {
     }
 }
 
-export default async function NotePage({params,}: {
-    params: Promise<{ slug: string }>;
-}) {
-    const { slug } = await params;
+export default async function NotePage({ params }: { params: { slug: string } }) {
+    const { slug } = params;
     const markdownContent = await getNoteFromLocalFile(slug);
 
     if (!markdownContent) {
@@ -36,16 +33,15 @@ export default async function NotePage({params,}: {
     }
 
     const CustomComponents: {
-        code({node, className, children, inline, ...props}: {
+        code({node, inline, className, children, ...props}: {
             node: any;
+            inline: any;
             className: any;
             children: any;
-            inline: any;
             [p: string]: any
         }): JSX.Element
     } = {
-        // Destructure `inline` directly from the function's arguments
-        code({ node, className, children, inline, ...props }) {
+        code({ node, inline, className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || '');
             const codeString = String(children).replace(/\n$/, '');
 
@@ -54,7 +50,7 @@ export default async function NotePage({params,}: {
                     {codeString}
                 </CardCode>
             ) : (
-                <code {...props} className={className}>
+                <code className={className} {...props}>
                     {children}
                 </code>
             );
@@ -68,7 +64,8 @@ export default async function NotePage({params,}: {
                     <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         rehypePlugins={[rehypeRaw]}
-                        components={CustomComponents}>
+                        components={CustomComponents}
+                    >
                         {markdownContent}
                     </ReactMarkdown>
                 </article>
