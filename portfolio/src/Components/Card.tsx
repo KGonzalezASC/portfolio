@@ -1,7 +1,7 @@
 ﻿import type { ReactNode } from "react";
 
 type Hover =
-    | `hover:${string}`
+    | `${string}:hover:${string}`   // responsive like md:hover
     | `transition${string}`
     | `duration-${string}`
     | `ease-${string}`
