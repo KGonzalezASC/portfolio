@@ -6,7 +6,6 @@ import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import { CardCode } from "@/app/notes/Components/CodeCard";
 import { ColorEffectProvider } from "@/app/notes/Components/ColorEffectProvider";
-import {JSX} from "react";
 
 export const dynamic = 'force-dynamic';
 
@@ -32,16 +31,9 @@ export default async function NotePage({ params }: { params: { slug: string } })
         return <div>Note not found.</div>;
     }
 
-    const CustomComponents: {
-        code({node, inline, className, children, ...props}: {
-            node: any;
-            inline: any;
-            className: any;
-            children: any;
-            [p: string]: any
-        }): JSX.Element
-    } = {
-        code({ node, inline, className, children, ...props }) {
+    // Use Partial<Components> and type code function as unknown first, then cast
+    const CustomComponents: Partial<Components> = {
+        code: (({ node, inline, className, children, ...props }) => {
             const match = /language-(\w+)/.exec(className || '');
             const codeString = String(children).replace(/\n$/, '');
 
@@ -54,7 +46,7 @@ export default async function NotePage({ params }: { params: { slug: string } })
                     {children}
                 </code>
             );
-        },
+        }) as unknown as Components['code'],
     };
 
     return (
