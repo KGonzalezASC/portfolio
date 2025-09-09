@@ -1,8 +1,8 @@
 ﻿// tailwind.config.ts
 import tailwindScrollbar from "tailwind-scrollbar";
-import {defineConfig} from "next/dist/experimental/testmode/playwright";
+import typography from "@tailwindcss/typography";
 
-export default defineConfig({
+export default {
     content: [
         "./src/**/*.{js,ts,jsx,tsx,mdx}",
         "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -27,6 +27,7 @@ export default defineConfig({
         },
     },
     plugins: [
+        typography,
         tailwindScrollbar({ nocompatible: true }),
     ],
-});
+};
