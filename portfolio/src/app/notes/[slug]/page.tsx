@@ -6,6 +6,7 @@ import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import { CardCode } from "@/app/notes/Components/CodeCard";
 import { ColorEffectProvider } from "@/app/notes/Components/ColorEffectProvider";
+import React from "react";
 
 export const dynamic = 'force-dynamic';
 
@@ -23,17 +24,28 @@ async function getNoteFromLocalFile(slug: string): Promise<string | null> {
     }
 }
 
-export default async function NotePage({ params }: { params: { slug: string } }) {
-    const { slug } = params;
+export async function NotePage({params}: { params: { slug: string } }) {
+    const {slug} = params;
     const markdownContent = await getNoteFromLocalFile(slug);
 
     if (!markdownContent) {
         return <div>Note not found.</div>;
     }
 
-    // Use Partial<Components> and type code function as unknown first, then cast
     const CustomComponents: Partial<Components> = {
-        code: (({ node, inline, className, children, ...props }) => {
+        code: (({
+                    node,
+                    inline,
+                    className,
+                    children,
+                    ...props
+                }: {
+            node: unknown;
+            inline?: boolean;
+            className?: string;
+            children: React.ReactNode;
+            [key: string]: unknown;
+        }) => {
             const match = /language-(\w+)/.exec(className || '');
             const codeString = String(children).replace(/\n$/, '');
 
@@ -46,7 +58,7 @@ export default async function NotePage({ params }: { params: { slug: string } })
                     {children}
                 </code>
             );
-        }) as unknown as Components['code'],
+        }) as Components['code'],
     };
 
     return (
