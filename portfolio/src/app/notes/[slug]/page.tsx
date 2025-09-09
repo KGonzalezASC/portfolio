@@ -4,9 +4,9 @@ import path from 'path';
 import ReactMarkdown, { type Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
-import { JSX } from "react"; //allows linter to "shut up"
 import { CardCode } from "@/app/notes/Components/CodeCard";
 import {ColorEffectProvider} from "@/app/notes/Components/ColorEffectProvider";
+import {JSX} from "react"; //now properly used as vercel linter didn't let this pass
 
 export const dynamic = 'force-dynamic';
 
@@ -35,7 +35,15 @@ export default async function NotePage({params,}: {
         return <div>Note not found.</div>;
     }
 
-    const CustomComponents: Components = {
+    const CustomComponents: {
+        code({node, className, children, inline, ...props}: {
+            node: any;
+            className: any;
+            children: any;
+            inline: any;
+            [p: string]: any
+        }): JSX.Element
+    } = {
         // Destructure `inline` directly from the function's arguments
         code({ node, className, children, inline, ...props }) {
             const match = /language-(\w+)/.exec(className || '');
